@@ -29,6 +29,7 @@ class Register extends React.Component  {
   // Call register route from server to create new user 
   // if user.id exists(user really filled in info), then load info to go to homepage
   onSubmitRegister = () => {
+    // fetch('http://localhost:3000/register', {
     fetch('https://facedetection-smartbrain-app.herokuapp.com/register', {
       method:'post',
       headers: {'Content-Type':'application/json'},
