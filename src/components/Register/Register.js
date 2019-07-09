@@ -32,7 +32,7 @@ class Register extends React.Component  {
     // fetch('http://localhost:3000/register', {
     fetch('https://facedetection-smartbrain-app.herokuapp.com/register', {
       method:'post',
-      headers: {'Content-Type':'application/json'},
+      headers: {'Content-Type':'application/json', 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify({
         email: this.state.email,
         password: this.state.password,
@@ -48,6 +48,9 @@ class Register extends React.Component  {
       })
           
   }
+
+  
+
 
   render(){
     return(
