@@ -20,7 +20,7 @@ const particlesOptions={
       density:{
         enable: true,
         value_area: 800
-      } 
+      }
     },
     move:{
       enable: true,
@@ -57,6 +57,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // if user refresh the web, we will keep the user signed in if he/she has token
     const token = window.sessionStorage.getItem('token');
     if (token) {
       // fetch('http://localhost:3000/signin', {
@@ -87,7 +88,11 @@ class App extends Component {
           })
         }
       })
-      .catch(console.log)
+      .catch(err => {
+        console.log(err)
+      })
+    } else{
+      return
     }
   }
 
@@ -118,7 +123,7 @@ class App extends Component {
           rightCol: width - (clarifaiFace.right_col * width),
           bottomRow: height - (clarifaiFace.bottom_row * height),
         }
-  
+
       });
     }
     return;
@@ -156,8 +161,8 @@ class App extends Component {
     // update number of entries for the current user id
     .then(response => {
       if (response){
-        fetch('https://facedetection-smartbrain-app.herokuapp.com/image', {
-          // fetch('http://localhost:3000/image', {
+        // fetch('http://localhost:3000/image', {
+          fetch('https://facedetection-smartbrain-app.herokuapp.com/image', {
             method:'put',
             headers: {
               'Content-Type':'application/json',
@@ -174,13 +179,13 @@ class App extends Component {
         })
         .catch(console.log)
       }
-    
+
     // display a box captures the face
     this.displayFaceBoxes(this.calculateFaceLocations(response))
     })
     .catch(err => console.log(err));
   }
-  
+
   // check if user is signed in or signed out
   onRouteChange = (route) => {
     if (route === 'signout'){
@@ -204,15 +209,15 @@ class App extends Component {
       <div className="App">
         <Particles className='particles'
          params={particlesOptions} />
-        
+
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}
-          toggleModal={this.toggleModal}
+          toggleModal={this.toggleModal} user={this.state.user}
         />
-        {isProfileOpen && 
+        {isProfileOpen &&
           <Modal>
-            <Profile 
-              isProfileOpen={isProfileOpen} 
-              toggleModal={this.toggleModal} 
+            <Profile
+              isProfileOpen={isProfileOpen}
+              toggleModal={this.toggleModal}
               loadUser={this.loadUser}
               user={this.state.user}/>
           </Modal>
@@ -220,17 +225,17 @@ class App extends Component {
         {
           // check if the route is for homepage. If it is, then display the homepage components
           route === "home"
-          ? 
+          ?
           <div>
             <Logo/>
-            <Rank 
-              name={this.state.user.name} 
+            <Rank
+              name={this.state.user.name}
               entries={this.state.user.entries}
             />
-            <ImageLinkForm 
-              onInputChange={this.onInputChange} 
+            <ImageLinkForm
+              onInputChange={this.onInputChange}
               onPictureSubmit={this.onPictureSubmit}/>
-            <FaceRecognition 
+            <FaceRecognition
               boxes={boxes}
               imageUrl={imageUrl}/>
           </div>
