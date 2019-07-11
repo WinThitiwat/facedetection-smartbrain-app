@@ -23,6 +23,28 @@ class ProfileIcon extends React.Component{
     }));
   }
 
+  onSignoutSubmit = () => {
+    const token = window.sessionStorage.getItem('token');
+    // fetch('http://localhost:3000/signout', {
+      fetch('https://facedetection-smartbrain-app.herokuapp.com/signout', {
+        method:'put',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          // user: this.props.user
+          'Authorization': token
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+      if (result.signoutSuccess === 'true')
+        window.sessionStorage.removeItem('token')
+        this.props.onRouteChange('signout');
+    })
+    .catch(console.log)
+  }
+
 
   render(){
     return(
@@ -44,7 +66,7 @@ class ProfileIcon extends React.Component{
             right
           >
             <DropdownItem onClick={this.props.toggleModal}>View Profile</DropdownItem>
-            <DropdownItem onClick={()=>this.props.onRouteChange("signout")}>Sign Out</DropdownItem>
+            <DropdownItem onClick={this.onSignoutSubmit}>Sign Out</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>

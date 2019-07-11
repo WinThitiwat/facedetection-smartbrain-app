@@ -26,6 +26,11 @@ class Register extends React.Component  {
     this.setState({name: event.target.value})
   }
 
+  // save token to end-user's browser to keep session running
+  saveAuthTokenInSession = (token) => {
+    window.sessionStorage.setItem('token', token);
+  }
+
   // Call register route from server to create new user 
   // if user.id exists(user really filled in info), then load info to go to homepage
   onSubmitRegister = () => {
@@ -39,13 +44,28 @@ class Register extends React.Component  {
         name: this.state.name
       })
     })
-      .then(response=>response.json())
-      .then(user => {
-        if (user.id ){
-          this.props.loadUser(user)
-          this.props.onRouteChange('home');
-        }
-      })
+    .then(resp => resp.json())
+    .then(user_data => {
+      if (user_data.userId && user_data.success === 'true'){
+        this.saveAuthTokenInSession(user_data.token)
+        // fetch(`http://localhost:3000/profile/${user_data.userId}`, {
+        fetch(`https://facedetection-smartbrain-app.herokuapp.com/profile/${user_data.userId}`, {
+          method: 'get',
+          headers: {
+            'Content-Type':'application/json',
+            'Authorization': user_data.token
+          }
+        })
+        .then(response=>response.json())
+        .then(user => {
+          if (user.id ){
+            this.props.loadUser(user)
+            this.props.onRouteChange('home');
+          }
+        })
+      }
+    })
+    .catch(console.log)
           
   }
 

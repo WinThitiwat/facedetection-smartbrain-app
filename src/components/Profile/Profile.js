@@ -69,7 +69,7 @@ class Profile extends React.Component {
               id="name"
               />
             
-            <label className="mt-2 fw6" htmlFor="user-name">Age:</label>
+            {/* <label className="mt-2 fw6" htmlFor="user-name">Age:</label>
             <input 
               onChange={this.onFormChange}
               className="pa2 ba w-100" 
@@ -87,7 +87,7 @@ class Profile extends React.Component {
               type="text" 
               name="user-pet"  
               id="pet"
-            />
+            /> */}
   
             <div className="mt4" style={{display:'flex', justifyContent:'space-evenly'}}>
               <button
